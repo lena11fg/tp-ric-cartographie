@@ -1,7 +1,8 @@
-from data.dataset import generate_dataset, normalize
+from data.dataset import generate_dataset, normalize ,f
 import matplotlib.pyplot as plt
 import numpy as np
-
+from model.mlp import MLP
+from model.loss import mse
 # Générer données
 X, z = generate_dataset()
 
@@ -21,7 +22,7 @@ grid_size = 100
 x_lin = np.linspace(-5, 5, grid_size)
 y_lin = np.linspace(-5, 5, grid_size)
 Xg, Yg = np.meshgrid(x_lin, y_lin)
-Zg = np.sin(np.sqrt(Xg**2 + Yg**2)) + 0.5 * np.cos(2*Xg + 2*Yg)
+Zg = f(Xg, Yg)
 
 # =========================
 # FIGURE AVEC 2 PLOTS
@@ -43,3 +44,11 @@ ax2.set_title("Heatmap")
 plt.colorbar(im, ax=ax2)
 
 plt.show()
+
+# modèle
+model = MLP()
+# forward
+y_pred = model.forward(X_norm)
+# loss
+loss_value = mse(y_pred, z_norm)
+print("Loss:", loss_value)
